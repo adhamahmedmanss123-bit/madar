@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#eef2f6" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="مدار" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+  <title>مدار | HYDROGEN AI 4 — POWERED BY ADHAM AHMED STUDIOS</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.72);
+      --glass-border: rgba(255, 255, 255, 0.85);
+      --glass-shadow: 0 20px 40px -15px rgba(100, 116, 139, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Cairo', 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 15% 15%, #ffffff 0%, #e2e8f0 45%, #cbd5e1 100%);
+      color: #1e293b; min-height: 100vh; overflow-x: hidden; margin: 0;
+    }
+    .orb { position: fixed; border-radius: 50%; filter: blur(60px); z-index: 0; pointer-events: none; animation: floatOrb 14s ease-in-out infinite alternate; }
+    .orb-1 { width: 380px; height: 380px; background: rgba(255,255,255,.95); top: -80px; right: -60px; }
+    .orb-2 { width: 320px; height: 320px; background: rgba(148,163,184,.35); bottom: -60px; left: -40px; animation-delay: -5s; }
+    .orb-3 { width: 260px; height: 260px; background: rgba(226,232,240,.8); top: 45%; left: 35%; animation-delay: -9s; }
+    @keyframes floatOrb { 0% { transform: translate(0,0) scale(1); } 100% { transform: translate(30px,-25px) scale(1.08); } }
+    .glass-3d { background: var(--glass-bg); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow); }
+    .glass-card-3d {
+      background: linear-gradient(145deg, rgba(255,255,255,.88), rgba(241,245,249,.65));
+      backdrop-filter: blur(18px); border: 1px solid rgba(255,255,255,.9);
+      box-shadow: 8px 8px 20px rgba(148,163,184,.16), -6px -6px 16px rgba(255,255,255,.9), inset 0 1px 1px rgba(255,255,255,.95);
+      transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease;
+    }
+    .glass-card-3d:hover { transform: translateY(-3px); }
+    .btn-3d { background: linear-gradient(145deg,#fff,#e2e8f0); border: 1px solid rgba(255,255,255,.95); box-shadow: 4px 4px 10px rgba(148,163,184,.25), -3px -3px 8px rgba(255,255,255,.95); transition: all .2s ease; cursor: pointer; }
+    .btn-3d:active { transform: scale(.97); box-shadow: inset 3px 3px 6px rgba(148,163,184,.3), inset -2px -2px 6px rgba(255,255,255,.9); }
+    .btn-primary-3d { background: linear-gradient(135deg,#334155,#0f172a); color: #fff; border: 1px solid rgba(255,255,255,.25); box-shadow: 0 10px 20px -6px rgba(15,23,42,.4), inset 0 1px 1px rgba(255,255,255,.3); transition: all .2s ease; cursor: pointer; }
+    .btn-primary-3d:hover { transform: translateY(-1px); }
+    .core-sphere { width: 54px; height: 54px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff 0%, #cbd5e1 45%, #475569 95%); box-shadow: 0 12px 24px rgba(51,65,85,.28), inset -4px -4px 10px rgba(15,23,42,.35), inset 4px 4px 10px rgba(255,255,255,.95); animation: spinPulse 8s ease-in-out infinite; }
+    @keyframes spinPulse { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-4px) rotate(8deg); } }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: rgba(148,163,184,.45); border-radius: 999px; }
+    body.kids-mode .glass-3d { border: 2px solid #cbd5e1; }
+    .hidden { display: none !important; }
+    .typing span { display:inline-block; width:6px; height:6px; margin:0 2px; border-radius:50%; background:#64748b; animation: blink 1s infinite; }
+    .typing span:nth-child(2){animation-delay:.2s} .typing span:nth-child(3){animation-delay:.4s}
+    @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+    input, select, textarea { font-family: inherit; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen relative">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+
+  <header class="glass-3d sticky top-0 z-30 px-4 py-3 flex items-center justify-between gap-2 border-b border-white/80">
+    <div class="flex items-center gap-3">
+      <button id="menuToggleBtn" class="lg:hidden btn-3d p-2 rounded-xl text-slate-700" aria-label="menu"><i data-lucide="menu" class="w-5 h-5"></i></button>
+      <div class="core-sphere !w-10 !h-10 shrink-0"></div>
+      <div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-800" data-i18n="appName">مدار</h1>
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-slate-800 text-white shadow-sm">HYDROGEN AI 4</span>
+        </div>
+        <p class="text-[10px] sm:text-[11px] font-bold tracking-wider text-slate-500 uppercase">POWERED BY ADHAM AHMED STUDIOS</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <select id="languageSelect" aria-label="language" class="btn-3d text-xs sm:text-sm font-semibold text-slate-700 rounded-xl px-2.5 py-2 outline-none cursor-pointer">
+        <option value="auto">🌐 Auto</option>
+        <option value="ar">🇸🇦 العربية</option>
+        <option value="en">🇺🇸 English</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="tr">🇹🇷 Türkçe</option>
+        <option value="ru">🇷🇺 Русский</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+        <option value="ur">🇵🇰 اردو</option>
+        <option value="pt">🇧🇷 Português</option>
+        <option value="it">🇮🇹 Italiano</option>
+      </select>
+      <button id="installAppBtn" class="btn-3d hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700">
+        <i data-lucide="download" class="w-4 h-4"></i><span data-i18n="install">تثبيت التطبيق</span>
+      </button>
+      <button id="openSettingsBtn" class="btn-3d flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-700" aria-label="settings">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+      </button>
+      <button id="openAuthBtn" class="btn-primary-3d flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold">
+        <i data-lucide="user-circle" class="w-4 h-4"></i><span id="userLabel" data-i18n="login">دخول</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="flex-1 flex relative z-10 max-w-7xl w-full mx-auto p-3 sm:p-4 gap-4">
+    <aside id="sidebar" class="glass-3d fixed lg:static inset-y-0 right-0 z-40 w-72 lg:w-64 rounded-none lg:rounded-3xl p-4 flex flex-col justify-between transition-transform duration-300">
+      <div class="space-y-4">
+        <div class="flex items-center justify-between lg:hidden pb-2 border-b border-slate-200/70">
+          <span class="font-extrabold text-slate-800" data-i18n="tools">أدوات مدار</span>
+          <button id="closeSidebarBtn" class="btn-3d p-1.5 rounded-lg text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+        </div>
+        <nav class="space-y-2" id="navModes">
+          <button data-mode="chat" class="mode-btn"><i data-lucide="sparkles" class="w-4 h-4"></i><span data-i18n="modeChat">المساعد الذكي</span></button>
+          <button data-mode="image" class="mode-btn"><i data-lucide="image" class="w-4 h-4"></i><span data-i18n="modeImage">توليد صور</span></button>
+          <button data-mode="video" class="mode-btn"><i data-lucide="video" class="w-4 h-4"></i><span data-i18n="modeVideo">استوديو الفيديو</span></button>
+          <button data-mode="study" class="mode-btn"><i data-lucide="graduation-cap" class="w-4 h-4"></i><span data-i18n="modeStudy">وضع الدراسة</span></button>
+          <button data-mode="browser" class="mode-btn"><i data-lucide="globe" class="w-4 h-4"></i><span data-i18n="modeBrowser">متصفح مدار</span></button>
+          <button data-mode="kids" class="mode-btn"><i data-lucide="smile" class="w-4 h-4"></i><span data-i18n="modeKids">وضع الأطفال</span></button>
+        </nav>
+        <div class="glass-card-3d rounded-2xl p-3 text-center space-y-2">
+          <p class="text-[11px] font-bold text-slate-600" data-i18n="runsOn">يعمل على:</p>
+          <div class="flex justify-center gap-2 text-[11px] font-bold text-slate-700">
+            <span class="px-2 py-1 rounded-lg bg-white/80 border border-white">Android</span>
+            <span class="px-2 py-1 rounded-lg bg-white/80 border border-white">iOS</span>
+            <span class="px-2 py-1 rounded-lg bg-white/80 border border-white">Windows</span>
+          </div>
+          <button id="sidebarInstallBtn" class="w-full btn-3d py-2 rounded-xl text-xs font-bold text-slate-800 flex items-center justify-center gap-1.5">
+            <i data-lucide="smartphone" class="w-3.5 h-3.5"></i><span data-i18n="installNow">تثبيت على جهازي</span>
+          </button>
+        </div>
+      </div>
+      <div class="pt-4 border-t border-slate-200/80 text-center space-y-1">
+        <p class="text-[10px] font-extrabold tracking-widest text-slate-600 uppercase">POWERED BY ADHAM AHMED STUDIOS</p>
+        <p class="text-[10px] text-slate-400">HYDROGEN AI 4 • v4.1</p>
+      </div>
+    </aside>
+    <div id="sidebarBackdrop" class="fixed inset-0 bg-slate-900/20 z-30 hidden lg:hidden"></div>
+
+    <main class="flex-1 min-w-0 glass-3d rounded-3xl p-4 sm:p-6 flex flex-col justify-between min-h-[78vh] overflow-hidden">
+
+      <!-- CHAT -->
+      <section id="view-chat" class="view-section flex-1 flex flex-col h-full">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/70 gap-2">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div id="statusDot" class="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></div>
+            <h2 class="font-extrabold text-slate-800 text-base sm:text-lg truncate" data-i18n="chatTitle">محادثة ذكية</h2>
+            <span id="statusText" class="text-[10px] font-bold text-slate-500 hidden sm:inline"></span>
+          </div>
+          <button id="clearChatBtn" class="btn-3d px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 shrink-0" data-i18n="clear">مسح المحادثة</button>
+        </div>
+        <div id="chatMessages" class="flex-1 overflow-y-auto space-y-3 pr-1 max-h-[54vh]" aria-live="polite"></div>
+        <form id="chatForm" class="mt-4 flex gap-2">
+          <input id="chatInput" type="text" required autocomplete="off" data-i18n-ph="chatPh" placeholder="اكتب رسالتك هنا..." class="flex-1 min-w-0 glass-card-3d rounded-2xl px-4 py-3 text-sm text-slate-800 outline-none placeholder:text-slate-400" />
+          <button id="chatSendBtn" type="submit" class="btn-primary-3d px-5 py-3 rounded-2xl font-bold text-sm flex items-center gap-2 shrink-0">
+            <span data-i18n="send">إرسال</span><i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </form>
+      </section>
+
+      <!-- IMAGE -->
+      <section id="view-image" class="view-section hidden flex-1 flex flex-col gap-4">
+        <div class="border-b border-slate-200/70 pb-3">
+          <h2 class="font-extrabold text-slate-800 text-lg" data-i18n="imageTitle">استوديو الصور</h2>
+          <p class="text-xs text-slate-500" data-i18n="imageSub">يرسم مشهداً مختلفاً حسب وصفك (بحر، ثلج، صحراء، غابة، ليل، غروب...).</p>
+        </div>
+        <form id="imageForm" class="flex flex-col sm:flex-row gap-2">
+          <input id="imagePrompt" type="text" required data-i18n-ph="imagePh" placeholder="مثال: جبال مغطاة بالثلوج وقت الغروب" class="flex-1 glass-card-3d rounded-2xl px-4 py-3 text-sm outline-none" />
+          <select id="imageStyle" class="btn-3d rounded-2xl px-3 py-3 text-xs font-bold text-slate-700 outline-none">
+            <option value="natural" data-i18n="styleNatural">واقعي</option>
+            <option value="3d" data-i18n="style3d">ثلاثي الأبعاد</option>
+            <option value="cinematic" data-i18n="styleCine">سينمائي</option>
+          </select>
+          <button type="submit" class="btn-primary-3d px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2">
+            <i data-lucide="wand-2" class="w-4 h-4"></i><span data-i18n="generateImage">توليد الصورة</span>
+          </button>
+        </form>
+        <div id="imageResultArea" class="flex-1 glass-card-3d rounded-3xl p-4 flex flex-col items-center justify-center min-h-[320px] text-center">
+          <i data-lucide="image-plus" class="w-12 h-12 text-slate-400 mb-2"></i>
+          <p class="text-sm font-bold text-slate-600" data-i18n="imageEmpty">اكتب وصف الصورة واضغط توليد</p>
+        </div>
+      </section>
+
+      <!-- VIDEO -->
+      <section id="view-video" class="view-section hidden flex-1 flex flex-col gap-4">
+        <div class="border-b border-slate-200/70 pb-3">
+          <h2 class="font-extrabold text-slate-800 text-lg" data-i18n="videoTitle">استوديو الفيديو</h2>
+          <p class="text-xs text-slate-500" data-i18n="videoSub">مشهد متحرك حسب وصفك مع تسجيل وتنزيل فيديو حقيقي.</p>
+        </div>
+        <form id="videoForm" class="flex flex-col sm:flex-row gap-2">
+          <input id="videoPrompt" type="text" required data-i18n-ph="videoPh" placeholder="مثال: شروق الشمس فوق البحر" class="flex-1 glass-card-3d rounded-2xl px-4 py-3 text-sm outline-none" />
+          <button type="submit" class="btn-primary-3d px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2">
+            <i data-lucide="film" class="w-4 h-4"></i><span data-i18n="createVideo">إنشاء الفيديو</span>
+          </button>
+        </form>
+        <div class="flex-1 glass-card-3d rounded-3xl p-4 flex flex-col items-center justify-center min-h-[320px] text-center">
+          <canvas id="videoCanvas" width="640" height="360" class="hidden w-full max-w-xl rounded-2xl shadow-lg border border-white"></canvas>
+          <div id="videoPlaceholder" class="flex flex-col items-center">
+            <i data-lucide="clapperboard" class="w-12 h-12 text-slate-400 mb-2"></i>
+            <p class="text-sm font-bold text-slate-600" data-i18n="videoEmpty">اكتب فكرة المشهد لتوليد الفيديو</p>
+          </div>
+          <div id="videoControls" class="hidden mt-3 flex flex-wrap justify-center gap-2">
+            <button id="toggleVideoPlayBtn" class="btn-3d px-4 py-2 rounded-xl text-xs font-bold text-slate-800" data-i18n="playPause">إيقاف / تشغيل</button>
+            <button id="downloadVideoFrameBtn" class="btn-3d px-4 py-2 rounded-xl text-xs font-bold text-slate-800" data-i18n="saveFrame">حفظ لقطة</button>
+            <button id="recordVideoBtn" class="btn-primary-3d px-4 py-2 rounded-xl text-xs font-bold" data-i18n="recordVideo">تسجيل وتنزيل فيديو (6 ثوانٍ)</button>
+          </div>
+          <p id="videoStatus" class="text-xs text-slate-500 mt-2"></p>
+        </div>
+      </section>
+
+      <!-- STUDY -->
+      <section id="view-study" class="view-section hidden flex-1 flex flex-col gap-4">
+        <div class="border-b border-slate-200/70 pb-3">
+          <h2 class="font-extrabold text-slate-800 text-lg" data-i18n="studyTitle">وضع الدراسة</h2>
+          <p class="text-xs text-slate-500" data-i18n="studySub">اكتب موضوعاً للحصول على ملخص واختبار. مع ربط نموذج ذكاء اصطناعي في الإعدادات يصبح المحتوى حقيقياً.</p>
+        </div>
+        <form id="studyForm" class="flex flex-col sm:flex-row gap-2">
+          <input id="studyTopic" type="text" required data-i18n-ph="studyPh" placeholder="مثال: قوانين نيوتن" class="flex-1 glass-card-3d rounded-2xl px-4 py-3 text-sm outline-none" />
+          <button type="submit" class="btn-primary-3d px-5 py-3 rounded-2xl font-bold text-sm flex items-center justify-center gap-2">
+            <i data-lucide="book-open" class="w-4 h-4"></i><span data-i18n="startStudy">ابدأ المذاكرة</span>
+          </button>
+        </form>
+        <div id="studyOutput" class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[55vh]"></div>
+      </section>
+
+      <!-- BROWSER -->
+      <section id="view-browser" class="view-section hidden flex-1 flex flex-col gap-3">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pb-2 border-b border-slate-200/70">
+          <div class="flex items-center gap-1.5">
+            <button id="browserBackBtn" class="btn-3d p-2 rounded-xl text-slate-700" aria-label="back"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+            <button id="browserHomeBtn" class="btn-3d p-2 rounded-xl text-slate-700" aria-label="home"><i data-lucide="home" class="w-4 h-4"></i></button>
+          </div>
+          <form id="browserForm" class="flex-1 flex gap-2">
+            <input id="browserUrlInput" type="text" value="https://ar.wikipedia.org" class="flex-1 min-w-0 glass-card-3d rounded-xl px-3.5 py-2 text-xs sm:text-sm outline-none" dir="ltr" />
+            <button type="submit" class="btn-primary-3d px-4 py-2 rounded-xl text-xs font-bold" data-i18n="go">ذهاب</button>
+          </form>
+          <button id="openExternalBtn" class="btn-3d px-3 py-2 rounded-xl text-xs font-bold text-slate-800 flex items-center justify-center gap-1">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i><span data-i18n="openTab">فتح في تبويب جديد</span>
+          </button>
+        </div>
+        <div class="glass-card-3d rounded-xl p-2.5 text-[11px] text-slate-600" data-i18n="browserNote">ملاحظة: كثير من المواقع (ومنها ويكيبيديا) تمنع عرضها داخل إطار. إذا ظهر الإطار فارغاً استخدم «فتح في تبويب جديد».</div>
+        <div class="flex-1 rounded-2xl overflow-hidden border border-white bg-white/90 min-h-[360px] relative">
+          <iframe id="madarIframe" title="browser" class="w-full h-full min-h-[360px] border-0" sandbox="allow-scripts allow-forms allow-popups" referrerpolicy="no-referrer"></iframe>
+        </div>
+      </section>
+
+      <!-- KIDS -->
+      <section id="view-kids" class="view-section hidden flex-1 flex flex-col justify-between gap-4">
+        <div class="flex items-center justify-between bg-white/80 p-3.5 rounded-2xl border border-white gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="text-2xl">🚀</span>
+            <div>
+              <h2 class="font-extrabold text-slate-800 text-base" data-i18n="kidsTitle">عالم مدار للأطفال</h2>
+              <p class="text-xs text-slate-500" data-i18n="kidsSub">قصص وألغاز وحقائق مدهشة</p>
+            </div>
+          </div>
+          <button id="exitKidsBtn" class="btn-3d px-3 py-2 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-1 shrink-0">
+            <i data-lucide="lock" class="w-3.5 h-3.5"></i><span data-i18n="parentExit">خروج (للوالدين)</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button data-kid-topic="story" class="kid-card glass-card-3d p-4 rounded-2xl text-center space-y-1.5"><div class="text-3xl">📖</div><h3 class="font-extrabold text-slate-800 text-sm" data-i18n="kStory">قصة</h3></button>
+          <button data-kid-topic="space" class="kid-card glass-card-3d p-4 rounded-2xl text-center space-y-1.5"><div class="text-3xl">🪐</div><h3 class="font-extrabold text-slate-800 text-sm" data-i18n="kSpace">أسرار الفضاء</h3></button>
+          <button data-kid-topic="riddle" class="kid-card glass-card-3d p-4 rounded-2xl text-center space-y-1.5"><div class="text-3xl">🧩</div><h3 class="font-extrabold text-slate-800 text-sm" data-i18n="kRiddle">لغز</h3></button>
+        </div>
+        <div id="kidsResponseBox" class="flex-1 glass-card-3d rounded-3xl p-5 flex flex-col items-center justify-center text-center text-sm font-bold text-slate-700 min-h-[200px] gap-3">
+          <p id="kidsText" data-i18n="kidsPick">اختر بطاقة من الأعلى لنبدأ! 🌟</p>
+          <button id="kidsRevealBtn" class="hidden btn-3d px-4 py-2 rounded-xl text-xs font-bold" data-i18n="reveal">اعرض الإجابة</button>
+        </div>
+      </section>
+
+      <footer class="mt-4 pt-3 border-t border-slate-200/70 flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+        <span class="font-extrabold text-slate-700 tracking-wide">POWERED BY ADHAM AHMED STUDIOS</span>
+        <span>Madar OS • HYDROGEN AI 4</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- AUTH MODAL (local profile) -->
+  <div id="authModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/35 backdrop-blur-sm p-4">
+    <div class="glass-3d rounded-3xl max-w-md w-full p-6 space-y-4 relative">
+      <button id="closeAuthModalBtn" class="btn-3d p-2 rounded-xl text-slate-600 absolute top-4 left-4" aria-label="close"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <div class="text-center space-y-1.5 pt-2">
+        <div class="core-sphere mx-auto mb-2"></div>
+        <h3 class="text-xl font-extrabold text-slate-800" data-i18n="profileTitle">الملف الشخصي</h3>
+        <p class="text-xs text-slate-500" data-i18n="profileNote">حساب محلي يُحفظ على جهازك فقط. تسجيل الدخول بـ Google/Apple ومزامنة الأجهزة يحتاجان خادماً ومفاتيح OAuth، وهما غير متوفرين في هذه النسخة.</p>
+      </div>
+      <form id="independentLoginForm" class="space-y-2.5">
+        <input id="customUserName" type="text" required maxlength="30" data-i18n-ph="namePh" placeholder="اسمك..." class="w-full glass-card-3d rounded-xl px-3.5 py-2.5 text-sm outline-none" />
+        <button type="submit" class="w-full btn-primary-3d py-2.5 rounded-xl text-xs font-extrabold" data-i18n="saveProfile">حفظ الاسم</button>
+        <button type="button" id="logoutBtn" class="w-full btn-3d py-2.5 rounded-xl text-xs font-bold text-slate-700" data-i18n="logout">تسجيل الخروج</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SETTINGS MODAL -->
+  <div id="settingsModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/35 backdrop-blur-sm p-4">
+    <div class="glass-3d rounded-3xl max-w-md w-full p-6 space-y-3 relative max-h-[92vh] overflow-y-auto">
+      <button id="closeSettingsBtn" class="btn-3d p-2 rounded-xl text-slate-600 absolute top-4 left-4" aria-label="close"><i data-lucide="x" class="w-4 h-4"></i></button>
+      <h3 class="text-lg font-extrabold text-slate-800 pt-1" data-i18n="aiSettings">ربط نموذج ذكاء اصطناعي</h3>
+      <p class="text-xs text-slate-600 leading-relaxed" data-i18n="aiSettingsNote">أدخل بيانات أي خدمة متوافقة مع واجهة OpenAI (Chat Completions). المفتاح يُحفظ في متصفحك فقط ويُرسل مباشرة للخدمة التي تحددها. لأمان أكبر في الإنتاج استخدم خادماً وسيطاً.</p>
+      <form id="settingsForm" class="space-y-2.5">
+        <label class="block text-xs font-bold text-slate-700">Base URL
+          <input id="apiBase" type="url" dir="ltr" placeholder="https://api.openai.com/v1" class="mt-1 w-full glass-card-3d rounded-xl px-3 py-2 text-sm outline-none" />
+        </label>
+        <label class="block text-xs font-bold text-slate-700">API Key
+          <input id="apiKey" type="password" dir="ltr" autocomplete="off" placeholder="sk-..." class="mt-1 w-full glass-card-3d rounded-xl px-3 py-2 text-sm outline-none" />
+        </label>
+        <label class="block text-xs font-bold text-slate-700">Model
+          <input id="apiModel" type="text" dir="ltr" placeholder="gpt-4o-mini" class="mt-1 w-full glass-card-3d rounded-xl px-3 py-2 text-sm outline-none" />
+        </label>
+        <div class="flex gap-2 pt-1">
+          <button type="submit" class="flex-1 btn-primary-3d py-2.5 rounded-xl text-xs font-extrabold" data-i18n="save">حفظ</button>
+          <button type="button" id="clearApiBtn" class="flex-1 btn-3d py-2.5 rounded-xl text-xs font-bold text-slate-700" data-i18n="disconnect">فصل وحذف المفتاح</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PARENTAL GATE -->
+  <div id="parentalModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="glass-3d rounded-3xl max-w-sm w-full p-6 text-center space-y-4">
+      <h3 class="font-extrabold text-slate-800 text-lg" data-i18n="parentGate">بوابة الوالدين 🔒</h3>
+      <p id="mathChallengeText" class="text-sm font-bold text-slate-600"></p>
+      <input id="mathAnswerInput" type="number" class="w-full glass-card-3d rounded-xl px-4 py-2.5 text-center font-bold outline-none" />
+      <p id="mathError" class="text-xs font-bold text-red-600 hidden" data-i18n="wrongAnswer">إجابة غير صحيحة، حاول مرة أخرى.</p>
+      <div class="flex gap-2">
+        <button id="cancelParentalBtn" class="flex-1 btn-3d py-2.5 rounded-xl text-xs font-bold" data-i18n="cancel">إلغاء</button>
+        <button id="confirmParentalBtn" class="flex-1 btn-primary-3d py-2.5 rounded-xl text-xs font-bold" data-i18n="confirmExit">تأكيد الخروج</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSTALL GUIDE -->
+  <div id="installModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+    <div class="glass-3d rounded-3xl max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-extrabold text-slate-800 text-lg" data-i18n="installTitle">تثبيت «مدار» كتطبيق</h3>
+        <button id="closeInstallModalBtn" class="btn-3d p-1.5 rounded-lg" aria-label="close"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+      <div class="space-y-2.5 text-xs text-slate-700 leading-relaxed">
+        <div class="glass-card-3d p-3 rounded-xl"><strong>Android:</strong> <span data-i18n="installAndroid">القائمة (⋮) ثم «تثبيت التطبيق».</span></div>
+        <div class="glass-card-3d p-3 rounded-xl"><strong>iPhone / iPad:</strong> <span data-i18n="installIos">زر المشاركة ثم «إضافة إلى الشاشة الرئيسية» (من Safari).</span></div>
+        <div class="glass-card-3d p-3 rounded-xl"><strong>Windows / Mac:</strong> <span data-i18n="installDesktop">أيقونة التثبيت في شريط العنوان (Chrome / Edge).</span></div>
+        <div class="glass-card-3d p-3 rounded-xl text-slate-600" data-i18n="installHttps">التثبيت يتطلب فتح الصفحة عبر https (أو localhost)، وليس من ملف محلي.</div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .mode-btn { width:100%; display:flex; align-items:center; gap:.75rem; padding:.75rem .875rem; border-radius:1rem; font-size:.875rem; font-weight:700; background:linear-gradient(145deg,#fff,#e2e8f0); color:#334155; border:1px solid rgba(255,255,255,.95); box-shadow:4px 4px 10px rgba(148,163,184,.25), -3px -3px 8px rgba(255,255,255,.95); cursor:pointer; }
+    .mode-btn.active { background:linear-gradient(135deg,#334155,#0f172a); color:#fff; box-shadow:0 10px 20px -6px rgba(15,23,42,.4); }
+    @media (max-width: 1023px) { #sidebar.closed { transform: translateX(100%); } html[dir="ltr"] #sidebar { right:auto; left:0; } html[dir="ltr"] #sidebar.closed { transform: translateX(-100%); } }
+  </style>
+
+  <script>
+  (function () {
+    'use strict';
+    const $ = (id) => document.getElementById(id);
+    const safeGet = (k) => { try { return localStorage.getItem(k); } catch (_) { return null; } };
+    const safeSet = (k, v) => { try { localStorage.setItem(k, v); } catch (_) {} };
+    const safeDel = (k) => { try { localStorage.removeItem(k); } catch (_) {} };
+    const icons = () => { try { lucide.createIcons(); } catch (_) {} };
+    icons();
+
+    /* ---------------- i18n ---------------- */
+    const I18N = {
+      ar: {
+        appName:'مدار', install:'تثبيت التطبيق', login:'دخول', tools:'أدوات مدار', modeChat:'المساعد الذكي', modeImage:'توليد صور', modeVideo:'استوديو الفيديو', modeStudy:'وضع الدراسة', modeBrowser:'متصفح مدار', modeKids:'وضع الأطفال',
+        runsOn:'يعمل على:', installNow:'تثبيت على جهازي', chatTitle:'محادثة ذكية', clear:'مسح المحادثة', chatPh:'اكتب رسالتك هنا...', send:'إرسال',
+        imageTitle:'استوديو الصور', imageSub:'يرسم مشهداً مختلفاً حسب وصفك (بحر، ثلج، صحراء، غابة، ليل، غروب...).', imagePh:'مثال: جبال مغطاة بالثلوج وقت الغروب', styleNatural:'واقعي', style3d:'ثلاثي الأبعاد', styleCine:'سينمائي', generateImage:'توليد الصورة', imageEmpty:'اكتب وصف الصورة واضغط توليد',
+        videoTitle:'استوديو الفيديو', videoSub:'مشهد متحرك حسب وصفك مع تسجيل وتنزيل فيديو حقيقي.', videoPh:'مثال: شروق الشمس فوق البحر', createVideo:'إنشاء الفيديو', videoEmpty:'اكتب فكرة المشهد لتوليد الفيديو', playPause:'إيقاف / تشغيل', saveFrame:'حفظ لقطة', recordVideo:'تسجيل وتنزيل فيديو (6 ثوانٍ)',
+        studyTitle:'وضع الدراسة', studySub:'اكتب موضوعاً للحصول على ملخص واختبار. مع ربط نموذج ذكاء اصطناعي في الإعدادات يصبح المحتوى حقيقياً.', studyPh:'مثال: قوانين نيوتن', startStudy:'ابدأ المذاكرة',
+        go:'ذهاب', openTab:'فتح في تبويب جديد', browserNote:'ملاحظة: كثير من المواقع (ومنها ويكيبيديا) تمنع عرضها داخل إطار. إذا ظهر الإطار فارغاً استخدم «فتح في تبويب جديد».',
+        kidsTitle:'عالم مدار للأطفال', kidsSub:'قصص وألغاز وحقائق مدهشة', parentExit:'خروج (للوالدين)', kStory:'قصة', kSpace:'أسرار الفضاء', kRiddle:'لغز', kidsPick:'اختر بطاقة من الأعلى لنبدأ! 🌟', reveal:'اعرض الإجابة',
+        profileTitle:'الملف الشخصي', profileNote:'حساب محلي يُحفظ على جهازك فقط. تسجيل الدخول بـ Google/Apple ومزامنة الأجهزة يحتاجان خادماً ومفاتيح OAuth، وهما غير متوفرين في هذه النسخة.', namePh:'اسمك...', saveProfile:'حفظ الاسم', logout:'تسجيل الخروج',
+        aiSettings:'ربط نموذج ذكاء اصطناعي', aiSettingsNote:'أدخل بيانات أي خدمة متوافقة مع واجهة OpenAI (Chat Completions). المفتاح يُحفظ في متصفحك فقط ويُرسل مباشرة للخدمة التي تحددها. لأمان أكبر في الإنتاج استخدم خادماً وسيطاً.', save:'حفظ', disconnect:'فصل وحذف المفتاح',
+        parentGate:'بوابة الوالدين 🔒', wrongAnswer:'إجابة غير صحيحة، حاول مرة أخرى.', cancel:'إلغاء', confirmExit:'تأكيد الخروج', mathQ:'للخروج من وضع الأطفال، كم حاصل: {a} × {b} ؟',
+        installTitle:'تثبيت «مدار» كتطبيق', installAndroid:'القائمة (⋮) ثم «تثبيت التطبيق».', installIos:'زر المشاركة ثم «إضافة إلى الشاشة الرئيسية» (من Safari).', installDesktop:'أيقونة التثبيت في شريط العنوان (Chrome / Edge).', installHttps:'التثبيت يتطلب فتح الصفحة عبر https (أو localhost)، وليس من ملف محلي.',
+        welcome:'أهلاً بك في مدار. لم يتم ربط نموذج ذكاء اصطناعي بعد، لذلك أعمل بوضع محدود. افتح الإعدادات ⚙️ وأدخل بيانات خدمة متوافقة مع OpenAI لتحصل على إجابات حقيقية.',
+        offlineReply:'لا يوجد نموذج متصل حالياً، لذا لا أستطيع الإجابة عن «{p}» فعلياً. اربط نموذجاً من الإعدادات ⚙️ لتفعيل المحادثة الحقيقية.',
+        cleared:'تم مسح المحادثة.', errPrefix:'تعذر الاتصال بالنموذج: ', connected:'متصل: ', offline:'غير متصل بنموذج', thinking:'...',
+        imgDesc:'الوصف: «{p}»', download:'تحميل الصورة', frameSaved:'تم حفظ اللقطة.', recording:'جارٍ التسجيل...', recDone:'تم التسجيل. بدأ التنزيل.', recUnsupported:'متصفحك لا يدعم تسجيل الفيديو.',
+        sumTitle:'ملخص: {t}', quizTitle:'اختبار سريع', q:'سؤال', correct:'✔️ إجابة صحيحة!', wrong:'❌ حاول مرة أخرى', studyLocal:'هذا قالب محلي عام. اربط نموذج ذكاء اصطناعي في الإعدادات للحصول على شرح حقيقي لموضوعك.',
+        sBasic:'المفهوم الأساسي: افهم التعريف والمبادئ الجوهرية لـ «{t}».', sKey:'النقطة المفتاحية: اربط السبب بالنتيجة لتسهيل التذكر.', sApply:'تطبيق: اشرح «{t}» بأسلوبك في ثلاث جمل.',
+        qGoal:'ما أفضل طريقة لإتقان «{t}»؟', aGood:'الفهم العميق مع التطبيق', aBad1:'الحفظ دون فهم', aBad2:'قراءة العنوان فقط',
+        studyErr:'تعذر توليد المحتوى من النموذج. تم عرض القالب المحلي.', typeName:'اكتب اسمك', pwaOk:'تم التثبيت',
+      },
+      en: {
+        appName:'Madar', install:'Install app', login:'Sign in', tools:'Madar tools', modeChat:'AI Assistant', modeImage:'Image generator', modeVideo:'Video studio', modeStudy:'Study mode', modeBrowser:'Madar browser', modeKids:'Kids mode',
+        runsOn:'Runs on:', installNow:'Install on my device', chatTitle:'Smart chat', clear:'Clear chat', chatPh:'Type your message...', send:'Send',
+        imageTitle:'Image studio', imageSub:'Draws a different scene based on your description (sea, snow, desert, forest, night, sunset...).', imagePh:'e.g. snowy mountains at sunset', styleNatural:'Natural', style3d:'3D', styleCine:'Cinematic', generateImage:'Generate image', imageEmpty:'Describe an image and press Generate',
+        videoTitle:'Video studio', videoSub:'An animated scene from your description, with real video recording and download.', videoPh:'e.g. sunrise over the sea', createVideo:'Create video', videoEmpty:'Describe a scene to generate a video', playPause:'Play / Pause', saveFrame:'Save frame', recordVideo:'Record & download video (6s)',
+        studyTitle:'Study mode', studySub:'Enter a topic for a summary and quiz. Connect an AI model in Settings for real content.', studyPh:'e.g. Newton\'s laws', startStudy:'Start studying',
+        go:'Go', openTab:'Open in new tab', browserNote:'Note: many sites (including Wikipedia) refuse to load inside a frame. If it stays blank, use "Open in new tab".',
+        kidsTitle:'Madar Kids World', kidsSub:'Stories, riddles and amazing facts', parentExit:'Exit (parents)', kStory:'Story', kSpace:'Space secrets', kRiddle:'Riddle', kidsPick:'Pick a card above to begin! 🌟', reveal:'Show answer',
+        profileTitle:'Profile', profileNote:'A local profile saved on this device only. Google/Apple sign-in and device sync need a server and OAuth keys, which this version does not include.', namePh:'Your name...', saveProfile:'Save name', logout:'Sign out',
+        aiSettings:'Connect an AI model', aiSettingsNote:'Enter details of any OpenAI-compatible (Chat Completions) service. The key is stored only in your browser and sent directly to the service you set. For production, use a proxy server.', save:'Save', disconnect:'Disconnect & delete key',
+        parentGate:'Parental gate 🔒', wrongAnswer:'Wrong answer, try again.', cancel:'Cancel', confirmExit:'Confirm exit', mathQ:'To exit kids mode, what is {a} × {b}?',
+        installTitle:'Install Madar as an app', installAndroid:'Menu (⋮) then "Install app".', installIos:'Share button then "Add to Home Screen" (in Safari).', installDesktop:'Install icon in the address bar (Chrome / Edge).', installHttps:'Installing requires opening the page over https (or localhost), not from a local file.',
+        welcome:'Welcome to Madar. No AI model is connected yet, so I run in limited mode. Open Settings ⚙️ and enter an OpenAI-compatible service to get real answers.',
+        offlineReply:'No model is connected, so I cannot really answer "{p}". Connect one in Settings ⚙️ to enable real chat.',
+        cleared:'Chat cleared.', errPrefix:'Could not reach the model: ', connected:'Connected: ', offline:'No model connected', thinking:'...',
+        imgDesc:'Prompt: "{p}"', download:'Download image', frameSaved:'Frame saved.', recording:'Recording...', recDone:'Recording done. Download started.', recUnsupported:'Your browser does not support video recording.',
+        sumTitle:'Summary: {t}', quizTitle:'Quick quiz', q:'Question', correct:'✔️ Correct!', wrong:'❌ Try again', studyLocal:'This is a generic local template. Connect an AI model in Settings for a real explanation of your topic.',
+        sBasic:'Core idea: understand the definition and main principles of "{t}".', sKey:'Key point: link cause to effect to remember it easily.', sApply:'Apply: explain "{t}" in your own words in three sentences.',
+        qGoal:'What is the best way to master "{t}"?', aGood:'Deep understanding plus practice', aBad1:'Memorizing without understanding', aBad2:'Reading only the title',
+        studyErr:'Could not generate content from the model. Showing the local template.', typeName:'Enter your name', pwaOk:'Installed',
+      },
+      fr: {
+        appName:'Madar', install:'Installer', login:'Connexion', tools:'Outils Madar', modeChat:'Assistant IA', modeImage:'Générateur d\'images', modeVideo:'Studio vidéo', modeStudy:'Mode étude', modeBrowser:'Navigateur Madar', modeKids:'Mode enfants',
+        runsOn:'Fonctionne sur :', installNow:'Installer sur mon appareil', chatTitle:'Chat intelligent', clear:'Effacer', chatPh:'Écrivez votre message...', send:'Envoyer',
+        imageTitle:'Studio d\'images', imageSub:'Dessine une scène selon votre description (mer, neige, désert, forêt, nuit, coucher de soleil...).', imagePh:'ex. montagnes enneigées au coucher du soleil', styleNatural:'Naturel', style3d:'3D', styleCine:'Cinéma', generateImage:'Générer', imageEmpty:'Décrivez une image puis appuyez sur Générer',
+        videoTitle:'Studio vidéo', videoSub:'Une scène animée selon votre description, avec enregistrement vidéo réel.', videoPh:'ex. lever de soleil sur la mer', createVideo:'Créer la vidéo', videoEmpty:'Décrivez une scène', playPause:'Lecture / Pause', saveFrame:'Enregistrer une image', recordVideo:'Enregistrer la vidéo (6 s)',
+        studyTitle:'Mode étude', studySub:'Saisissez un sujet pour un résumé et un quiz. Connectez un modèle IA dans les paramètres pour un vrai contenu.', studyPh:'ex. lois de Newton', startStudy:'Commencer',
+        go:'Aller', openTab:'Ouvrir dans un onglet', browserNote:'Remarque : de nombreux sites (dont Wikipédia) refusent l\'affichage dans un cadre. Utilisez « Ouvrir dans un onglet ».',
+        kidsTitle:'Monde Madar des enfants', kidsSub:'Histoires, énigmes et faits étonnants', parentExit:'Quitter (parents)', kStory:'Histoire', kSpace:'Secrets de l\'espace', kRiddle:'Énigme', kidsPick:'Choisissez une carte ! 🌟', reveal:'Voir la réponse',
+        profileTitle:'Profil', profileNote:'Profil local enregistré sur cet appareil uniquement. La connexion Google/Apple et la synchronisation nécessitent un serveur, absent de cette version.', namePh:'Votre nom...', saveProfile:'Enregistrer', logout:'Déconnexion',
+        aiSettings:'Connecter un modèle IA', aiSettingsNote:'Saisissez un service compatible OpenAI (Chat Completions). La clé reste dans votre navigateur et est envoyée directement au service indiqué.', save:'Enregistrer', disconnect:'Déconnecter et supprimer la clé',
+        parentGate:'Contrôle parental 🔒', wrongAnswer:'Mauvaise réponse.', cancel:'Annuler', confirmExit:'Confirmer', mathQ:'Pour quitter le mode enfants : {a} × {b} = ?',
+        installTitle:'Installer Madar', installAndroid:'Menu (⋮) puis « Installer l\'application ».', installIos:'Partager puis « Sur l\'écran d\'accueil » (Safari).', installDesktop:'Icône d\'installation dans la barre d\'adresse.', installHttps:'L\'installation nécessite https (ou localhost).',
+        welcome:'Bienvenue sur Madar. Aucun modèle IA n\'est connecté, je fonctionne en mode limité. Ouvrez les paramètres ⚙️ pour connecter un service compatible OpenAI.',
+        offlineReply:'Aucun modèle connecté : je ne peux pas répondre réellement à « {p} ». Connectez-en un dans les paramètres ⚙️.',
+        cleared:'Discussion effacée.', errPrefix:'Connexion impossible : ', connected:'Connecté : ', offline:'Aucun modèle', thinking:'...',
+        imgDesc:'Description : « {p} »', download:'Télécharger', frameSaved:'Image enregistrée.', recording:'Enregistrement...', recDone:'Terminé.', recUnsupported:'Enregistrement vidéo non pris en charge.',
+        sumTitle:'Résumé : {t}', quizTitle:'Quiz rapide', q:'Question', correct:'✔️ Correct !', wrong:'❌ Réessayez', studyLocal:'Modèle local générique. Connectez un modèle IA pour une vraie explication.',
+        sBasic:'Idée clé : comprenez la définition et les principes de « {t} ».', sKey:'Point clé : reliez cause et effet.', sApply:'Application : expliquez « {t} » en trois phrases.',
+        qGoal:'Quelle est la meilleure façon de maîtriser « {t} » ?', aGood:'Comprendre en profondeur et pratiquer', aBad1:'Mémoriser sans comprendre', aBad2:'Lire seulement le titre',
+        studyErr:'Génération impossible. Modèle local affiché.', typeName:'Votre nom', pwaOk:'Installé',
+      },
+      es: {
+        appName:'Madar', install:'Instalar', login:'Entrar', tools:'Herramientas', modeChat:'Asistente IA', modeImage:'Generador de imágenes', modeVideo:'Estudio de vídeo', modeStudy:'Modo estudio', modeBrowser:'Navegador Madar', modeKids:'Modo niños',
+        runsOn:'Funciona en:', installNow:'Instalar en mi dispositivo', chatTitle:'Chat inteligente', clear:'Borrar chat', chatPh:'Escribe tu mensaje...', send:'Enviar',
+        imageTitle:'Estudio de imágenes', imageSub:'Dibuja una escena según tu descripción (mar, nieve, desierto, bosque, noche, atardecer...).', imagePh:'ej. montañas nevadas al atardecer', styleNatural:'Natural', style3d:'3D', styleCine:'Cine', generateImage:'Generar', imageEmpty:'Describe una imagen y pulsa Generar',
+        videoTitle:'Estudio de vídeo', videoSub:'Escena animada según tu descripción, con grabación real de vídeo.', videoPh:'ej. amanecer sobre el mar', createVideo:'Crear vídeo', videoEmpty:'Describe una escena', playPause:'Reproducir / Pausa', saveFrame:'Guardar fotograma', recordVideo:'Grabar vídeo (6 s)',
+        studyTitle:'Modo estudio', studySub:'Escribe un tema para un resumen y un test. Conecta un modelo de IA en Ajustes para contenido real.', studyPh:'ej. leyes de Newton', startStudy:'Empezar',
+        go:'Ir', openTab:'Abrir en pestaña nueva', browserNote:'Nota: muchos sitios (como Wikipedia) no permiten mostrarse en un marco. Usa «Abrir en pestaña nueva».',
+        kidsTitle:'Mundo Madar para niños', kidsSub:'Cuentos, acertijos y datos curiosos', parentExit:'Salir (padres)', kStory:'Cuento', kSpace:'Secretos del espacio', kRiddle:'Acertijo', kidsPick:'¡Elige una tarjeta! 🌟', reveal:'Ver respuesta',
+        profileTitle:'Perfil', profileNote:'Perfil local guardado solo en este dispositivo. El inicio con Google/Apple y la sincronización requieren un servidor que esta versión no incluye.', namePh:'Tu nombre...', saveProfile:'Guardar', logout:'Cerrar sesión',
+        aiSettings:'Conectar un modelo de IA', aiSettingsNote:'Introduce un servicio compatible con OpenAI. La clave se guarda solo en tu navegador y se envía directamente al servicio indicado.', save:'Guardar', disconnect:'Desconectar y borrar clave',
+        parentGate:'Control parental 🔒', wrongAnswer:'Respuesta incorrecta.', cancel:'Cancelar', confirmExit:'Confirmar', mathQ:'Para salir del modo niños: {a} × {b} = ?',
+        installTitle:'Instalar Madar', installAndroid:'Menú (⋮) y «Instalar aplicación».', installIos:'Compartir y «Añadir a pantalla de inicio» (Safari).', installDesktop:'Icono de instalación en la barra de direcciones.', installHttps:'Requiere https (o localhost).',
+        welcome:'Bienvenido a Madar. No hay modelo de IA conectado, así que funciono en modo limitado. Abre Ajustes ⚙️ para conectar un servicio compatible con OpenAI.',
+        offlineReply:'No hay modelo conectado, no puedo responder realmente a «{p}». Conecta uno en Ajustes ⚙️.',
+        cleared:'Chat borrado.', errPrefix:'No se pudo conectar: ', connected:'Conectado: ', offline:'Sin modelo', thinking:'...',
+        imgDesc:'Descripción: «{p}»', download:'Descargar', frameSaved:'Fotograma guardado.', recording:'Grabando...', recDone:'Listo.', recUnsupported:'Tu navegador no admite grabación de vídeo.',
+        sumTitle:'Resumen: {t}', quizTitle:'Test rápido', q:'Pregunta', correct:'✔️ ¡Correcto!', wrong:'❌ Inténtalo de nuevo', studyLocal:'Plantilla local genérica. Conecta un modelo de IA para una explicación real.',
+        sBasic:'Idea clave: entiende la definición y los principios de «{t}».', sKey:'Punto clave: relaciona causa y efecto.', sApply:'Aplicación: explica «{t}» en tres frases.',
+        qGoal:'¿Cuál es la mejor forma de dominar «{t}»?', aGood:'Comprensión profunda y práctica', aBad1:'Memorizar sin entender', aBad2:'Leer solo el título',
+        studyErr:'No se pudo generar. Se muestra la plantilla local.', typeName:'Tu nombre', pwaOk:'Instalado',
+      },
+    };
+    const RTL = ['ar', 'ur', 'fa', 'he'];
+    let lang = 'ar';
+    function resolveLang(sel) {
+      if (sel === 'auto') { const n = (navigator.language || 'en').slice(0, 2); return n; }
+      return sel;
+    }
+    function t(key, vars) {
+      const dict = I18N[lang] || I18N.en;
+      let s = dict[key] !== undefined ? dict[key] : (I18N.en[key] !== undefined ? I18N.en[key] : key);
+      if (vars) Object.keys(vars).forEach(k => { s = s.split('{' + k + '}').join(vars[k]); });
+      return s;
+    }
+    function applyLang(sel) {
+      lang = resolveLang(sel);
+      if (!I18N[lang] && lang !== 'en') { /* falls back to English for untranslated languages */ }
+      const rtl = RTL.includes(lang);
+      document.documentElement.lang = lang;
+      document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+      document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+      const u = safeGet('madar_user'); if (u) $('userLabel').textContent = u;
+      refreshStatus();
+      icons();
+    }
+
+    /* ---------------- helpers ---------------- */
+    function esc(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+    function rng(seed) { let a = seed >>> 0; return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+    function shuffle(arr, r) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function show(el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+    function hide(el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+
+    /* ---------------- sidebar & modes ---------------- */
+    const sidebar = $('sidebar'), backdrop = $('sidebarBackdrop');
+    const modeButtons = document.querySelectorAll('.mode-btn');
+    const views = document.querySelectorAll('.view-section');
+    const isMobile = () => window.matchMedia('(max-width: 1023px)').matches;
+    function openSidebar() { sidebar.classList.remove('closed'); backdrop.classList.remove('hidden'); }
+    function closeSidebar() { if (isMobile()) sidebar.classList.add('closed'); backdrop.classList.add('hidden'); }
+    if (isMobile()) sidebar.classList.add('closed');
+    $('menuToggleBtn').addEventListener('click', openSidebar);
+    $('closeSidebarBtn').addEventListener('click', closeSidebar);
+    backdrop.addEventListener('click', closeSidebar);
+
+    let kidsLocked = safeGet('madar_kids') === '1';
+    let currentMode = 'chat';
+    function switchMode(target, force) {
+      if (kidsLocked && target !== 'kids' && !force) { openParentalGate(); return; }
+      currentMode = target;
+      kidsLocked = (target === 'kids');
+      if (kidsLocked) safeSet('madar_kids', '1'); else safeDel('madar_kids');
+      document.body.classList.toggle('kids-mode', kidsLocked);
+      modeButtons.forEach(b => b.classList.toggle('active', b.dataset.mode === target));
+      views.forEach(v => { v.classList.toggle('hidden', v.id !== 'view-' + target); });
+      // In kids mode, hide other modes in the nav so a child can't wander
+      modeButtons.forEach(b => { b.classList.toggle('hidden', kidsLocked && b.dataset.mode !== 'kids'); });
+      if (target !== 'video') stopVideoLoop();
+      if (target === 'browser' && !$('madarIframe').getAttribute('src')) navigate($('browserUrlInput').value, true);
+      closeSidebar();
+    }
+    modeButtons.forEach(b => b.addEventListener('click', () => switchMode(b.dataset.mode)));
+
+    /* ---------------- AI config & chat ---------------- */
+    function getCfg() {
+      return { base: (safeGet('madar_api_base') || '').replace(/\/+$/, ''), key: safeGet('madar_api_key') || '', model: safeGet('madar_api_model') || '' };
+    }
+    function hasModel() { const c = getCfg(); return !!(c.base && c.key && c.model); }
+    function refreshStatus() {
+      const ok = hasModel();
+      $('statusDot').className = 'w-2.5 h-2.5 rounded-full shrink-0 ' + (ok ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500');
+      $('statusText').textContent = ok ? t('connected') + getCfg().model : t('offline');
+    }
+    async function callModel(messages, opts) {
+      const c = getCfg();
+      let u;
+      try { u = new URL(c.base + '/chat/completions'); } catch (_) { throw new Error('Invalid Base URL'); }
+      if (u.protocol !== 'https:' && u.hostname !== 'localhost' && u.hostname !== '127.0.0.1') throw new Error('Base URL must use https');
+      const body = Object.assign({ model: c.model, messages: messages }, opts || {});
+      const res = await fetch(u.toString(), { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + c.key }, body: JSON.stringify(body) });
+      if (!res.ok) { const tx = await res.text().catch(() => ''); throw new Error('HTTP ' + res.status + ' ' + tx.slice(0, 160)); }
+      const data = await res.json();
+      return (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+    }
+
+    const chatMessages = $('chatMessages');
+    let history = [];
+    function addMsg(text, isUser) {
+      const w = document.createElement('div');
+      if (isUser) {
+        w.className = 'btn-primary-3d rounded-2xl p-3.5 max-w-xl text-sm leading-relaxed whitespace-pre-wrap break-words';
+        w.style.marginInlineStart = 'auto';
+        w.textContent = text;
+      } else {
+        w.className = 'glass-card-3d rounded-2xl p-4 max-w-2xl text-sm text-slate-800 leading-relaxed space-y-1.5';
+        const head = document.createElement('div');
+        head.className = 'text-xs font-extrabold text-slate-700';
+        head.textContent = 'مدار • HYDROGEN AI 4';
+        const body = document.createElement('div');
+        body.className = 'msg-body whitespace-pre-wrap break-words';
+        body.textContent = text;
+        w.appendChild(head); w.appendChild(body);
+      }
+      chatMessages.appendChild(w);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return w;
+    }
+    function resetChat() { chatMessages.textContent = ''; history = []; addMsg(t('welcome'), false); }
+
+    let sending = false;
+    $('chatForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (sending) return;
+      const val = $('chatInput').value.trim();
+      if (!val) return;
+      addMsg(val, true);
+      $('chatInput').value = '';
+      if (!hasModel()) { setTimeout(() => addMsg(t('offlineReply', { p: val }), false), 250); return; }
+      sending = true; $('chatSendBtn').disabled = true;
+      const holder = addMsg('', false);
+      holder.querySelector('.msg-body').innerHTML = '<span class="typing"><span></span><span></span><span></span></span>';
+      history.push({ role: 'user', content: val });
+      try {
+        const reply = await callModel([{ role: 'system', content: 'You are Madar (HYDROGEN AI 4), a helpful assistant by Adham Ahmed Studios. Reply in the language of the user.' }].concat(history.slice(-20)));
+        history.push({ role: 'assistant', content: reply });
+        holder.querySelector('.msg-body').textContent = reply || '—';
+      } catch (err) {
+        history.pop();
+        holder.querySelector('.msg-body').textContent = t('errPrefix') + err.message;
+      } finally { sending = false; $('chatSendBtn').disabled = false; chatMessages.scrollTop = chatMessages.scrollHeight; }
+    });
+    $('clearChatBtn').addEventListener('click', () => { chatMessages.textContent = ''; history = []; addMsg(t('cleared'), false); });
+
+    /* ---------------- scene engine (image + video) ---------------- */
+    const THEMES = [
+      { keys: ['بحر','محيط','شاطئ','sea','ocean','beach','mer','mar','playa'], id: 'sea' },
+      { keys: ['ثلج','جليد','شتاء','snow','ice','winter','neige','nieve'], id: 'snow' },
+      { keys: ['صحراء','رمل','desert','sand','désert','desierto'], id: 'desert' },
+      { keys: ['غابة','شجر','أشجار','forest','tree','woods','forêt','bosque'], id: 'forest' },
+      { keys: ['ليل','نجوم','قمر','night','star','moon','nuit','noche'], id: 'night' },
+      { keys: ['غروب','شروق','شمس','sunset','sunrise','sun','soleil','atardecer'], id: 'sunset' },
+    ];
+    const PALETTES = {
+      sea:    { sky: ['#bae6fd','#e0f2fe','#f0f9ff'], far: '#7dd3fc', mid: '#38bdf8', near: '#0369a1', water: ['#38bdf8','#0c4a6e'], sun: [1, 1, .9], sunPos: [.7,.28] },
+      snow:   { sky: ['#e2e8f0','#f1f5f9','#ffffff'], far: '#cbd5e1', mid: '#94a3b8', near: '#f8fafc', water: null, sun: [1,1,1], sunPos: [.75,.2] },
+      desert: { sky: ['#fde68a','#fed7aa','#fff7ed'], far: '#fdba74', mid: '#f59e0b', near: '#b45309', water: null, sun: [1,.95,.7], sunPos: [.72,.22] },
+      forest: { sky: ['#bbf7d0','#dcfce7','#f0fdf4'], far: '#86efac', mid: '#22c55e', near: '#14532d', water: null, sun: [1,1,.85], sunPos: [.3,.2] },
+      night:  { sky: ['#0f172a','#1e293b','#334155'], far: '#334155', mid: '#1e293b', near: '#020617', water: null, sun: [.9,.93,1], sunPos: [.78,.2], stars: true },
+      sunset: { sky: ['#7c3aed','#fb7185','#fdba74'], far: '#9d174d', mid: '#7e22ce', near: '#1e1b4b', water: null, sun: [1,.85,.5], sunPos: [.5,.55] },
+      default:{ sky: ['#e0f2fe','#f1f5f9','#94a3b8'], far: '#94a3b8', mid: '#64748b', near: '#1e293b', water: null, sun: [1,1,1], sunPos: [.72,.28] },
+    };
+    function detectTheme(prompt) {
+      const p = prompt.toLowerCase();
+      for (const th of THEMES) if (th.keys.some(k => p.includes(k))) return th.id;
+      return 'default';
+    }
+    function drawScene(ctx, w, h, prompt, style, time) {
+      const th = detectTheme(prompt), pal = PALETTES[th];
+      const seed = hashStr(prompt);
+      const r = rng(seed);
+      const off = time || 0;
+      const g = ctx.createLinearGradient(0, 0, 0, h);
+      g.addColorStop(0, pal.sky[0]); g.addColorStop(.55, pal.sky[1]); g.addColorStop(1, pal.sky[2]);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+
+      if (pal.stars) {
+        ctx.fillStyle = 'rgba(255,255,255,.85)';
+        for (let i = 0; i < 90; i++) { const x = r() * w, y = r() * h * .55, s = r() * 1.8 + .4; ctx.globalAlpha = .5 + .5 * Math.sin(off * 2 + i); ctx.beginPath(); ctx.arc(x, y, s, 0, 7); ctx.fill(); }
+        ctx.globalAlpha = 1;
+      } else { for (let i = 0; i < 90; i++) r(); }
+
+      const sx = pal.sunPos[0] * w, sy = pal.sunPos[1] * h + Math.sin(off) * 4;
+      const sg = ctx.createRadialGradient(sx, sy, 6, sx, sy, h * .38);
+      const sc = pal.sun.map(v => Math.round(v * 255));
+      sg.addColorStop(0, `rgba(${sc[0]},${sc[1]},${sc[2]},.95)`); sg.addColorStop(1, `rgba(${sc[0]},${sc[1]},${sc[2]},0)`);
+      ctx.fillStyle = sg; ctx.fillRect(0, 0, w, h);
+
+      // clouds
+      if (th !== 'night') {
+        ctx.fillStyle = 'rgba(255,255,255,.55)';
+        for (let i = 0; i < 4; i++) {
+          const cx = ((r() * w + off * (14 + i * 6)) % (w + 200)) - 100, cy = 40 + r() * h * .22;
+          for (let k = 0; k < 4; k++) { ctx.beginPath(); ctx.ellipse(cx + k * 26, cy + (k % 2) * 6, 38, 16, 0, 0, 7); ctx.fill(); }
+        }
+      } else { for (let i = 0; i < 16; i++) r(); }
+
+      const layers = [
+        { color: pal.far, base: h * .62, amp: h * .2, speed: 4 },
+        { color: pal.mid, base: h * .74, amp: h * .15, speed: 9 },
+        { color: pal.near, base: h * .88, amp: h * .1, speed: 16 },
+      ];
+      layers.forEach((L, idx) => {
+        const ph = r() * 10, fr = .004 + r() * .006, ph2 = r() * 10;
+        ctx.beginPath(); ctx.moveTo(0, h);
+        for (let x = 0; x <= w; x += 8) {
+          const xx = x + off * L.speed;
+          const y = L.base - Math.abs(Math.sin(xx * fr + ph)) * L.amp - Math.cos(xx * fr * 2.7 + ph2) * L.amp * .22;
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(w, h); ctx.closePath();
+        ctx.fillStyle = L.color; ctx.fill();
+      });
+
+      if (pal.water) {
+        const wg = ctx.createLinearGradient(0, h * .72, 0, h);
+        wg.addColorStop(0, pal.water[0]); wg.addColorStop(1, pal.water[1]);
+        ctx.fillStyle = wg; ctx.fillRect(0, h * .74, w, h * .26);
+        ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = 1.5;
+        for (let i = 0; i < 14; i++) { const y = h * .76 + i * (h * .017); ctx.beginPath(); for (let x = 0; x <= w; x += 10) { const yy = y + Math.sin(x * .05 + off * 3 + i) * 2; x === 0 ? ctx.moveTo(x, yy) : ctx.lineTo(x, yy); } ctx.stroke(); }
+      }
+      if (th === 'forest') {
+        for (let i = 0; i < 16; i++) {
+          const x = r() * w, base = h * (.8 + r() * .18), s = 22 + r() * 30;
+          ctx.fillStyle = '#14532d';
+          ctx.beginPath(); ctx.moveTo(x, base - s * 2.2); ctx.lineTo(x - s * .7, base); ctx.lineTo(x + s * .7, base); ctx.closePath(); ctx.fill();
+          ctx.fillStyle = '#451a03'; ctx.fillRect(x - 2, base, 4, 8);
+        }
+      } else { for (let i = 0; i < 48; i++) r(); }
+      if (th === 'snow') {
+        ctx.fillStyle = 'rgba(255,255,255,.9)';
+        for (let i = 0; i < 70; i++) { const x = (r() * w + Math.sin(off + i) * 10) % w, y = ((r() * h) + off * 40 * (.5 + r())) % h; ctx.beginPath(); ctx.arc(x, y, 1 + r() * 2.2, 0, 7); ctx.fill(); }
+      }
+
+      // style overlays
+      if (style === 'cinematic') {
+        const v = ctx.createRadialGradient(w / 2, h / 2, h * .3, w / 2, h / 2, h * .85);
+        v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,.55)');
+        ctx.fillStyle = v; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#000'; ctx.fillRect(0, 0, w, h * .09); ctx.fillRect(0, h * .91, w, h * .09);
+      } else if (style === '3d') {
+        for (let i = 0; i < 5; i++) {
+          const cx = r() * w, cy = h * (.3 + r() * .3), rad = 14 + r() * 22;
+          const og = ctx.createRadialGradient(cx - rad * .3, cy - rad * .3, 2, cx, cy, rad);
+          og.addColorStop(0, '#ffffff'); og.addColorStop(.7, 'rgba(148,163,184,.9)'); og.addColorStop(1, 'rgba(30,41,59,.9)');
+          ctx.beginPath(); ctx.arc(cx, cy + Math.sin(off * 1.5 + i) * 6, rad, 0, 7); ctx.fillStyle = og; ctx.fill();
+        }
+      }
+      ctx.fillStyle = 'rgba(255,255,255,.88)'; ctx.font = 'bold ' + Math.round(w / 56) + 'px sans-serif';
+      ctx.textAlign = 'left'; ctx.fillText('HYDROGEN AI 4 • POWERED BY ADHAM AHMED STUDIOS', 16, h - Math.round(h * (style === 'cinematic' ? .11 : .04)));
+    }
+
+    /* image */
+    $('imageForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const prompt = $('imagePrompt').value.trim(), style = $('imageStyle').value, area = $('imageResultArea');
+      if (!prompt) return;
+      const c = document.createElement('canvas'); c.width = 1280; c.height = 720;
+      drawScene(c.getContext('2d'), c.width, c.height, prompt, style, 0);
+      const url = c.toDataURL('image/png');
+      area.textContent = '';
+      const img = document.createElement('img'); img.src = url; img.alt = prompt; img.className = 'w-full max-w-xl rounded-2xl shadow-lg border border-white mb-3';
+      const p = document.createElement('p'); p.className = 'text-xs font-bold text-slate-700 mb-2'; p.textContent = t('imgDesc', { p: prompt });
+      const a = document.createElement('a'); a.href = url; a.download = 'madar-image.png'; a.className = 'btn-primary-3d px-4 py-2 rounded-xl text-xs font-bold inline-flex items-center gap-1.5'; a.textContent = t('download');
+      area.appendChild(img); area.appendChild(p); area.appendChild(a);
+    });
+
+    /* video */
+    const vc = $('videoCanvas'), vctx = vc.getContext('2d');
+    let vPrompt = '', vAnim = null, vPlaying = true, vT = 0, vLast = 0;
+    function videoLoop(ts) {
+      if (!vLast) vLast = ts;
+      const dt = (ts - vLast) / 1000; vLast = ts;
+      if (vPlaying) { vT += dt; drawScene(vctx, vc.width, vc.height, vPrompt, 'natural', vT); }
+      vAnim = requestAnimationFrame(videoLoop);
+    }
+    function startVideoLoop() { if (!vAnim) { vLast = 0; vAnim = requestAnimationFrame(videoLoop); } }
+    function stopVideoLoop() { if (vAnim) { cancelAnimationFrame(vAnim); vAnim = null; } }
+    $('videoForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      vPrompt = $('videoPrompt').value.trim(); if (!vPrompt) return;
+      $('videoPlaceholder').classList.add('hidden'); vc.classList.remove('hidden'); $('videoControls').classList.remove('hidden');
+      vPlaying = true; vT = 0; startVideoLoop();
+    });
+    $('toggleVideoPlayBtn').addEventListener('click', () => { vPlaying = !vPlaying; });
+    $('downloadVideoFrameBtn').addEventListener('click', () => {
+      const a = document.createElement('a'); a.download = 'madar-frame.png'; a.href = vc.toDataURL('image/png'); a.click();
+      $('videoStatus').textContent = t('frameSaved');
+    });
+    $('recordVideoBtn').addEventListener('click', () => {
+      if (!vc.captureStream || typeof MediaRecorder === 'undefined') { $('videoStatus').textContent = t('recUnsupported'); return; }
+      const mimes = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
+      const mime = mimes.find(m => MediaRecorder.isTypeSupported(m));
+      if (!mime) { $('videoStatus').textContent = t('recUnsupported'); return; }
+      vPlaying = true; startVideoLoop();
+      const rec = new MediaRecorder(vc.captureStream(30), { mimeType: mime, videoBitsPerSecond: 4000000 });
+      const chunks = [];
+      rec.ondataavailable = ev => { if (ev.data.size) chunks.push(ev.data); };
+      rec.onstop = () => {
+        const blob = new Blob(chunks, { type: mime });
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'madar-video.' + (mime.indexOf('mp4') > -1 ? 'mp4' : 'webm'); a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+        $('videoStatus').textContent = t('recDone'); $('recordVideoBtn').disabled = false;
+      };
+      $('recordVideoBtn').disabled = true; $('videoStatus').textContent = t('recording');
+      rec.start(); setTimeout(() => { if (rec.state !== 'inactive') rec.stop(); }, 6000);
+    });
+
+    /* ---------------- study ---------------- */
+    function renderStudy(topic, data) {
+      const out = $('studyOutput'); out.textContent = '';
+      const card1 = document.createElement('div'); card1.className = 'glass-card-3d rounded-2xl p-4 space-y-2';
+      const h1 = document.createElement('h3'); h1.className = 'font-extrabold text-slate-800 text-sm'; h1.textContent = '📘 ' + t('sumTitle', { t: topic });
+      const ul = document.createElement('ul'); ul.className = 'text-xs text-slate-700 space-y-1.5 list-disc ps-4';
+      data.summary.forEach(s => { const li = document.createElement('li'); li.textContent = s; ul.appendChild(li); });
+      card1.appendChild(h1); card1.appendChild(ul);
+      if (data.note) { const n = document.createElement('p'); n.className = 'text-[11px] text-slate-500'; n.textContent = data.note; card1.appendChild(n); }
+      const card2 = document.createElement('div'); card2.className = 'glass-card-3d rounded-2xl p-4 space-y-3';
+      const h2 = document.createElement('h3'); h2.className = 'font-extrabold text-slate-800 text-sm'; h2.textContent = '✅ ' + t('quizTitle');
+      card2.appendChild(h2);
+      const r = rng(hashStr(topic + Date.now()));
+      data.questions.forEach((qq, qi) => {
+        const box = document.createElement('div'); box.className = 'space-y-1.5';
+        const qp = document.createElement('p'); qp.className = 'text-xs font-bold text-slate-700'; qp.textContent = (qi + 1) + '. ' + qq.q;
+        box.appendChild(qp);
+        const opts = shuffle(qq.options.map((o, i) => ({ o, ok: i === qq.answer })), r);
+        opts.forEach(op => {
+          const b = document.createElement('button'); b.type = 'button'; b.className = 'w-full btn-3d py-2 px-3 rounded-xl text-xs font-bold text-start'; b.textContent = op.o;
+          b.addEventListener('click', () => {
+            if (op.ok) { b.classList.add('btn-primary-3d'); b.textContent = t('correct') + ' ' + op.o; box.querySelectorAll('button').forEach(x => x.disabled = true); }
+            else { b.textContent = t('wrong'); b.disabled = true; }
+          });
+          box.appendChild(b);
+        });
+        card2.appendChild(box);
+      });
+      out.appendChild(card1); out.appendChild(card2);
+    }
+    function localStudy(topic, note) {
+      return { note: note || t('studyLocal'), summary: [t('sBasic', { t: topic }), t('sKey'), t('sApply', { t: topic })],
+        questions: [{ q: t('qGoal', { t: topic }), options: [t('aGood'), t('aBad1'), t('aBad2')], answer: 0 }] };
+    }
+    $('studyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const topic = $('studyTopic').value.trim(); if (!topic) return;
+      if (!hasModel()) { renderStudy(topic, localStudy(topic)); return; }
+      $('studyOutput').textContent = '…';
+      try {
+        const raw = await callModel([
+          { role: 'system', content: 'You are a study assistant. Answer in the same language as the topic. Return ONLY valid JSON: {"summary":[3 to 6 short strings],"questions":[{"q":"...","options":["...","...","..."],"answer":0}]} with exactly 3 questions, 3 options each, answer = index of the correct option.' },
+          { role: 'user', content: topic }]);
+        const m = raw.match(/\{[\s\S]*\}/); if (!m) throw new Error('bad json');
+        const d = JSON.parse(m[0]);
+        if (!Array.isArray(d.summary) || !Array.isArray(d.questions)) throw new Error('bad shape');
+        d.summary = d.summary.map(String);
+        d.questions = d.questions.filter(q => q && Array.isArray(q.options) && q.options.length > 1 && Number.isInteger(q.answer) && q.answer >= 0 && q.answer < q.options.length).map(q => ({ q: String(q.q), options: q.options.map(String), answer: q.answer }));
+        if (!d.questions.length) throw new Error('no questions');
+        renderStudy(topic, d);
+      } catch (err) { renderStudy(topic, localStudy(topic, t('studyErr'))); }
+    });
+
+    /* ---------------- browser ---------------- */
+    const frame = $('madarIframe'), urlInput = $('browserUrlInput');
+    let navStack = [], navIdx = -1;
+    function normalizeUrl(q) {
+      q = q.trim();
+      if (!q) return null;
+      if (/^https?:\/\//i.test(q)) return q;
+      if (/^[^\s]+\.[^\s]{2,}$/.test(q)) return 'https://' + q;
+      const wikiLang = RTL.includes(lang) && lang === 'ar' ? 'ar' : (['fr','es','de','tr','ru','zh','ja','ko','hi','ur','pt','it'].includes(lang) ? lang : 'en');
+      return 'https://' + wikiLang + '.wikipedia.org/wiki/Special:Search?search=' + encodeURIComponent(q);
+    }
+    function navigate(q, noPush) {
+      const u = normalizeUrl(q); if (!u) return;
+      try { const p = new URL(u); if (!/^https?:$/.test(p.protocol)) return; } catch (_) { return; }
+      urlInput.value = u; frame.src = u;
+      if (!noPush) { navStack = navStack.slice(0, navIdx + 1); navStack.push(u); navIdx = navStack.length - 1; }
+      else if (!navStack.length) { navStack = [u]; navIdx = 0; }
+    }
+    $('browserForm').addEventListener('submit', (e) => { e.preventDefault(); navigate(urlInput.value); });
+    $('browserHomeBtn').addEventListener('click', () => navigate('https://ar.wikipedia.org'));
+    $('browserBackBtn').addEventListener('click', () => { if (navIdx > 0) { navIdx--; const u = navStack[navIdx]; urlInput.value = u; frame.src = u; } });
+    $('openExternalBtn').addEventListener('click', () => { const u = normalizeUrl(urlInput.value); if (u) window.open(u, '_blank', 'noopener,noreferrer'); });
+
+    /* ---------------- kids ---------------- */
+    const KIDS = {
+      ar: {
+        story: ['كان يا ما كان، رائد فضاء صغير اسمه «كريم» انطلق بمركبته نحو القمر، واكتشف أن التعاون والفضول هما مفتاح كل اكتشاف عظيم! 🌟', 'في غابة بعيدة عاشت سلحفاة صغيرة اسمها «سلمى» حلمت بالوصول إلى قمة الجبل. مشت كل يوم قليلاً قليلاً، وفي النهاية وصلت! تعلمنا أن الصبر يصنع المعجزات. 🐢', 'نجمة صغيرة خافت من الظلام فأضاءت أكثر، فتبعها كل الطيور المسافرة إلى بيتها. الشجاعة تُضيء الطريق للآخرين. ⭐'],
+        space: ['كوكب زحل محاط بحلقات ضخمة من الجليد والصخور تدور حوله! 🪐', 'الشمس أكبر من الأرض بأكثر من مليون مرة، لكنها نجمة متوسطة الحجم! ☀️', 'على القمر، يمكنك القفز أعلى بست مرات مما تقفز على الأرض لأن جاذبيته أضعف! 🌙', 'سنة كاملة على كوكب عطارد تساوي نحو 88 يوماً أرضياً فقط! 🔥'],
+        riddle: [{ q: 'شيء كلما أخذت منه كبر، فما هو؟', a: 'الحفرة! 😄' }, { q: 'له أسنان ولا يعض، فما هو؟', a: 'المشط! 🪮' }, { q: 'يمشي بلا أرجل ويبكي بلا عيون، فما هو؟', a: 'السحاب! ☁️' }],
+      },
+      en: {
+        story: ['Once upon a time, a little astronaut named Karim flew to the Moon and learned that teamwork and curiosity unlock every great discovery! 🌟', 'A tiny turtle named Salma dreamed of reaching the mountain top. She walked a little every day, and one day she made it. Patience works wonders! 🐢', 'A small star was afraid of the dark, so it shone brighter, and all the travelling birds followed its light home. Courage lights the way for others! ⭐'],
+        space: ['Saturn has huge rings made of ice and rock chunks! 🪐', 'The Sun is over a million times bigger than Earth, yet it is an average star! ☀️', 'On the Moon you can jump about six times higher than on Earth! 🌙', 'A year on Mercury lasts only about 88 Earth days! 🔥'],
+        riddle: [{ q: 'The more you take from it, the bigger it gets. What is it?', a: 'A hole! 😄' }, { q: 'It has teeth but cannot bite. What is it?', a: 'A comb! 🪮' }, { q: 'It runs without legs and cries without eyes. What is it?', a: 'A cloud! ☁️' }],
+      },
+    };
+    let kidAnswer = '';
+    function kidsData() { return KIDS[lang] || KIDS.en; }
+    document.querySelectorAll('.kid-card').forEach(card => card.addEventListener('click', () => {
+      const topic = card.dataset.kidTopic, list = kidsData()[topic];
+      const item = list[Math.floor(Math.random() * list.length)];
+      const txt = $('kidsText'), rev = $('kidsRevealBtn');
+      txt.removeAttribute('data-i18n');
+      if (topic === 'riddle') { txt.textContent = '🧩 ' + item.q; kidAnswer = item.a; rev.classList.remove('hidden'); }
+      else { txt.textContent = item; rev.classList.add('hidden'); }
+    }));
+    $('kidsRevealBtn').addEventListener('click', () => { $('kidsText').textContent += '  →  ' + kidAnswer; $('kidsRevealBtn').classList.add('hidden'); });
+
+    /* parental gate */
+    let mathAnswer = 0;
+    function openParentalGate() {
+      const a = Math.floor(Math.random() * 8) + 3, b = Math.floor(Math.random() * 8) + 3;
+      mathAnswer = a * b;
+      $('mathChallengeText').textContent = t('mathQ', { a: a, b: b });
+      $('mathAnswerInput').value = ''; $('mathError').classList.add('hidden');
+      show($('parentalModal')); $('mathAnswerInput').focus();
+    }
+    $('exitKidsBtn').addEventListener('click', openParentalGate);
+    $('cancelParentalBtn').addEventListener('click', () => hide($('parentalModal')));
+    function confirmParental() {
+      if (Number($('mathAnswerInput').value) === mathAnswer && $('mathAnswerInput').value !== '') { hide($('parentalModal')); switchMode('chat', true); }
+      else $('mathError').classList.remove('hidden');
+    }
+    $('confirmParentalBtn').addEventListener('click', confirmParental);
+    $('mathAnswerInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') confirmParental(); });
+
+    /* ---------------- profile (local) ---------------- */
+    $('openAuthBtn').addEventListener('click', () => { $('customUserName').value = safeGet('madar_user') || ''; show($('authModal')); });
+    $('closeAuthModalBtn').addEventListener('click', () => hide($('authModal')));
+    $('independentLoginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = $('customUserName').value.trim().slice(0, 30);
+      if (name) { safeSet('madar_user', name); $('userLabel').textContent = name; hide($('authModal')); }
+    });
+    $('logoutBtn').addEventListener('click', () => { safeDel('madar_user'); $('userLabel').textContent = t('login'); hide($('authModal')); });
+    if (safeGet('madar_user')) $('userLabel').textContent = safeGet('madar_user');
+
+    /* ---------------- settings ---------------- */
+    $('openSettingsBtn').addEventListener('click', () => {
+      const c = getCfg(); $('apiBase').value = c.base; $('apiKey').value = c.key; $('apiModel').value = c.model; show($('settingsModal'));
+    });
+    $('closeSettingsBtn').addEventListener('click', () => hide($('settingsModal')));
+    $('settingsForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      safeSet('madar_api_base', $('apiBase').value.trim()); safeSet('madar_api_key', $('apiKey').value.trim()); safeSet('madar_api_model', $('apiModel').value.trim());
+      refreshStatus(); hide($('settingsModal'));
+    });
+    $('clearApiBtn').addEventListener('click', () => {
+      safeDel('madar_api_base'); safeDel('madar_api_key'); safeDel('madar_api_model');
+      $('apiBase').value = ''; $('apiKey').value = ''; $('apiModel').value = ''; refreshStatus();
+    });
+
+    /* ---------------- PWA ---------------- */
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+    window.addEventListener('appinstalled', () => { deferredPrompt = null; });
+    async function handleInstall() {
+      if (deferredPrompt) { deferredPrompt.prompt(); try { await deferredPrompt.userChoice; } catch (_) {} deferredPrompt = null; }
+      else show($('installModal'));
+    }
+    $('installAppBtn').addEventListener('click', handleInstall);
+    $('sidebarInstallBtn').addEventListener('click', handleInstall);
+    $('closeInstallModalBtn').addEventListener('click', () => hide($('installModal')));
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+    }
+
+    /* ---------------- modal dismiss (Esc / backdrop) ---------------- */
+    ['authModal', 'settingsModal', 'parentalModal', 'installModal'].forEach(id => {
+      $(id).addEventListener('click', (e) => { if (e.target === $(id)) hide($(id)); });
+    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') ['authModal', 'settingsModal', 'installModal'].forEach(id => hide($(id))); });
+
+    /* ---------------- init ---------------- */
+    const savedLang = safeGet('madar_lang') || 'ar';
+    $('languageSelect').value = savedLang;
+    $('languageSelect').addEventListener('change', (e) => {
+      safeSet('madar_lang', e.target.value); applyLang(e.target.value); resetChat();
+    });
+    applyLang(savedLang);
+    resetChat();
+    if (kidsLocked) switchMode('kids', true); else switchMode('chat', true);
+  })();
+  </script>
+</body>
+</html>
